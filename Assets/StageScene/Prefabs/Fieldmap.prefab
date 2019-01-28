@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 64814742858403054}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 64647162622308676}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -63,7 +63,7 @@ GameObject:
   - component: {fileID: 64413887117689330}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 64390061180751424}
   m_Layer: 0
   m_Name: Ceiling
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 64425004847094514}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 64589165908726438}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 4068489557344618}
   m_Layer: 0
   m_Name: Fieldmap
-  m_TagString: Untagged
+  m_TagString: GravitySource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,7 +147,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1930350773803774}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -50, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4444005990661170}
@@ -945,17 +945,9 @@ MonoBehaviour:
     angleError: 8
     areaError: 15
   dontDestroyMeshOnDelete: 0
-  m_selectedFaces: 00000000
-  m_SelectedEdges:
-  - x: 0
-    y: 1
-  - x: 2
-    y: 0
-  - x: 1
-    y: 3
-  - x: 3
-    y: 2
-  m_selectedTriangles: 00000000010000000200000003000000
+  m_selectedFaces: 
+  m_SelectedEdges: []
+  m_selectedTriangles: 
 --- !u!114 &114595057643685402
 MonoBehaviour:
   m_ObjectHideFlags: 1

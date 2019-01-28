@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class GravityController : MonoBehaviour
 {
     [SerializeField] float m_accelerationOfGravity = 9.18f;
@@ -31,22 +30,32 @@ public class GravityController : MonoBehaviour
         }
 
         Vector3 dir = m_centerOfGravity.position - m_player.position;
-
+        var resultVec = GetDirection(dir);
+        Debug.Log(resultVec);
 
         Physics.gravity = dir.normalized * m_accelerationOfGravity;
-        m_player.up = -1 * dir;
+        m_player.up = -1 * resultVec;
     }
 
     /// <summary>
-    /// Maxs the vec.
-    /// vectorを渡して成分の最大値のみ残したvectorを返す
+    /// 引数の<param name="vec">Vector3</param>から各成分の絶対値を取り、最大値の成分のみ入った<returns>Vector3</returns>を返す
     /// </summary>
-    /// <returns>The vec.</returns>
-    /// <param name="vec">Vec.</param>
-    //Vector3 MaxVec(Vector3 vec) 
-    //{
-    //    var x = vec.x;
-    //    var y = vec.y;
-    //    var z = vec.z;
-    //}
+    Vector3 GetDirection(Vector3 vec)
+    {
+        var x = vec.x >= 0f ? vec.x : -vec.x;
+        var y = vec.y >= 0f ? vec.y : -vec.y;
+        var z = vec.z >= 0f ? vec.z : -vec.z;
+
+        var result = new Vector3
+            (
+             x > y && x > z ? vec.x : 0f,
+             y > x && y > z ? vec.y : 0f,
+             z > x && z > y ? vec.z : 0f
+             );
+
+        //if (result == Vector3.zero)
+        //    Debug.Log("成分値が同値でした");
+
+        return result;
+    }
 }
