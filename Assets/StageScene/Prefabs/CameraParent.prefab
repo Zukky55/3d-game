@@ -51,6 +51,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4695419573530666}
+  - component: {fileID: 114857952958705082}
   m_Layer: 0
   m_Name: CameraParent
   m_TagString: Untagged
@@ -146,3 +147,20 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1643383536246656}
   m_Enabled: 1
+--- !u!114 &114857952958705082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1713586341471342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8781e52bfbb0446c6bb841d5234c97a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lookTarget: {fileID: 0}
+  m_distance: 2.45
+  m_offsetPosition: {x: 0, y: 1.3}
+  m_positionInterpolate: 0.1
+  m_turnInterpolate: 0.05
+  m_offsetEulerAngle: {x: -2.12, y: 0}

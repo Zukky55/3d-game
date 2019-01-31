@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test : MonoBehaviour
+namespace ReviewGames
 {
-   
-    private void FixedUpdate()
+    public class Test : MonoBehaviour
     {
-        //Debug.Log("Time.fixedDeltaTime : " + Time.fixedDeltaTime);
+
+        private void FixedUpdate()
+        {
+            //Debug.Log(Physics.gravity);
+        }
     }
 }
