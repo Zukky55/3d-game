@@ -70,7 +70,7 @@ namespace ReviewGames
             if (dir != Vector3.zero) // 移動している時
             {
                 dir = m_directionalStandard.TransformDirection(dir);//カメラに対して正面の向きに変換する
-                transform.forward = Vector3.Slerp(transform.forward, dir, m_turnInterpolateAmount); // 入力された向きに対して少し遅延しながら入力方向に向かせる
+                //transform.forward = Vector3.Slerp(transform.forward, dir, m_turnInterpolateAmount); // 入力された向きに対して少し遅延しながら入力方向に向かせる
                 m_rb.AddForce(dir * m_moveSpeed, ForceMode.Force);
                 //m_rb.velocity = dir * m_moveSpeed;
             }

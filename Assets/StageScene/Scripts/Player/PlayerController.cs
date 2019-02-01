@@ -74,7 +74,6 @@ namespace ReviewGames
                 dir.y = 0;
                 transform.forward = Vector3.Slerp(transform.forward, dir, m_turnInterpolateAmount); // 入力された向きに対して少し遅延しながら入力方向に向かせる
                 m_rb.velocity = dir * m_moveSpeed;
-
                 m_animator.SetFloat(AnimParameter.Speed.ToString(), dir.sqrMagnitude); // Walk or Run へ遷移
             }
             else // 移動していない時

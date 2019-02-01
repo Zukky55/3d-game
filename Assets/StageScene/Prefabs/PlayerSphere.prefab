@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23949233623449398}
   - component: {fileID: 135258303548211552}
   - component: {fileID: 54964854730278758}
-  - component: {fileID: 114113977180451932}
+  - component: {fileID: 114066041507195378}
   m_Layer: 0
   m_Name: PlayerSphere
   m_TagString: Player
@@ -101,7 +101,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &114113977180451932
+--- !u!114 &114066041507195378
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,11 +109,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1073717085208594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e74b8649eca9344adbd0519298591e, type: 3}
+  m_Script: {fileID: 11500000, guid: 21bc6213e2ffa5d4f99eb3a615c273b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_moveSpeed: 5
-  m_turnSpeed: 1
+  m_turnSpeed: 8
   m_turnInterpolateAmount: 1
   m_jumpPower: 10
   m_gravityMultiplier: 1
