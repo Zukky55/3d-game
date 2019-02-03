@@ -9,7 +9,32 @@ namespace ReviewGames
     {
         #region Properties
         /// <summary>Input direction. コントローラーから入力されたベクトル</summary>
-        public Vector3 InputDir { get { return new Vector3(m_horizontal, 0, m_vertical); } }
+        public Vector3 InputDir
+        {
+            get
+            {
+                switch (m_gravityController.m_CurrentGravitySource)
+                {
+                    case GravityController.GravitySource.Forward:
+                        break;
+                    case GravityController.GravitySource.Back:
+                        break;
+                    case GravityController.GravitySource.Right:
+                        break;
+                    case GravityController.GravitySource.Left:
+                        break;
+                    case GravityController.GravitySource.Up:
+                        return new Vector3(m_horizontal, 0, m_vertical);
+                    case GravityController.GravitySource.Down:
+                        return new Vector3(m_horizontal, 0, m_vertical);
+                    case GravityController.GravitySource.Other:
+                        break;
+                    default:
+                        break;
+                }
+                return new Vector3(m_horizontal, 0, m_vertical);
+            }
+        }
         #endregion
 
         #region Field
@@ -39,13 +64,15 @@ namespace ReviewGames
         /// <summary>浮動ジョイスティック</summary>
         [SerializeField] FloatingJoystick m_FJoyStick;
         /// <summary>同じオブジェクトに追加された Animator への参照</summary>
-        private Animator m_anim;
+        Animator m_anim;
+        GravityController m_gravityController;
         #endregion
 
         private void OnEnable()
         {
             m_rb = GetComponent<Rigidbody>();
             m_anim = GetComponent<Animator>();
+            m_gravityController = GravityController.Instance;
         }
 
         private void Update()
@@ -78,6 +105,7 @@ namespace ReviewGames
             m_isGrounded = false;
             m_anim.SetBool(AnimParameter.IsGrounded.ToString(), false);
         }
+
         /// <summary>
         /// 入力に対する移動処理.
         /// </summary>
@@ -85,14 +113,18 @@ namespace ReviewGames
         {
             // x-z 平面(地面と平行)の速度を求める
             var dir = InputDir; // 方向の入力で、x-z平面の移動方向が決まる。
-
-            // 入力に合わせてアニメーションを制御する
+            transform.up = -Physics.gravity;
+            Debug.Log("transform.rotation " + transform.rotation);
             if (dir != Vector3.zero) // 移動している時
             {
+
                 dir = m_directionalStandard.TransformDirection(dir);//カメラに対して正面の向きに変換する
-                dir.y = 0;
-                transform.forward = Vector3.Slerp(transform.forward, dir, m_turnInterpolateAmount); // 入力された向きに対して少し遅延しながら入力方向に向かせる
-                m_rb.velocity = dir * m_moveSpeed;
+                dir.y = 0f;
+                var targetVec = Vector3.Slerp(transform.forward, dir, m_turnInterpolateAmount);
+                //var targetRot = Quaternion.Slerp(transform.rotation,)
+                transform.forward = targetVec;
+
+                m_rb.AddForce(dir * m_moveSpeed, ForceMode.Force);
                 m_anim.SetFloat(AnimParameter.Speed.ToString(), dir.sqrMagnitude); // Walk or Run へ遷移
             }
             else // 移動していない時

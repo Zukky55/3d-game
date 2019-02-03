@@ -38,7 +38,12 @@ namespace ReviewGames
         {
             m_cameraParent.position = Vector3.Slerp(m_cameraParent.position, m_lookTarget.position, m_positionInterpolate); //カメラの座標をターゲットの座標へ滑らかに動かす
             m_cameraChild.localPosition = new Vector3(0, 0, -m_distance); //pivotからの距離
-            m_cameraParent.rotation = Quaternion.Slerp(m_cameraParent.rotation, m_lookTarget.rotation, m_turnInterpolate); //カメラの向きをターゲットの向きへ滑らかに動かす
+            var diffRot = m_lookTarget.rotation * Quaternion.Inverse(m_cameraParent.rotation);
+            if (diffRot.y != 1f && diffRot.y != -1f) // 完全にplayerとカメラの向きが正反対になった時は動かさない
+            {
+                m_cameraParent.rotation = Quaternion.Slerp(m_cameraParent.rotation, m_lookTarget.rotation, m_turnInterpolate); //カメラの向きをターゲットの向きへ滑らかに動かす
+                //m_cameraParent.up = Vector3.Slerp(m_cameraParent.up, m_lookTarget.up, m_turnInterpolate);
+            }
             m_camera.localRotation = Quaternion.Euler(m_offsetEulerAngle); // ターゲットに追従しているカメラの角度をここで任意にずらす
             m_camera.localPosition = m_offsetPosition; // 追従しているカメラの位置から任意の位置にずらす
         }

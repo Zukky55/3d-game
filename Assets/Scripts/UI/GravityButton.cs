@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ReviewGames
 {
@@ -10,10 +11,18 @@ namespace ReviewGames
     public class GravityButton : ButtonBase
     {
         [Header("Componets")]
-        [SerializeField] GravityController m_gravityController;
+        [SerializeField] Transform m_player; // 現状使う予定なし
+        GravityController m_gravityController;
 
         [Header("Parameters")]
         [SerializeField] GravityController.GravitySource m_targetGravitySource;
+        
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            m_gravityController = GravityController.Instance;
+        }
 
         protected override void Activate()
         {
@@ -24,5 +33,6 @@ namespace ReviewGames
 
             m_gravityController.ChangeGravitySource(m_targetGravitySource);
         }
+
     }
 }
