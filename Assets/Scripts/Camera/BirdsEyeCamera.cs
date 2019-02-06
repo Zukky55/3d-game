@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ReviewGames
 {
-    public class PlayerCamera : MonoBehaviour
+    public class BirdsEyeCamera : MonoBehaviour
     {
         /// <summary>カメラの親オブジェクト。注視点とその点への回り込み角度を管理する</summary>
         private Transform m_cameraParent;
@@ -41,6 +41,7 @@ namespace ReviewGames
             if (diffRot.y != 1f && diffRot.y != -1f) // 完全にplayerとカメラの向きが正反対になった時は動かさない
             {
                 m_cameraParent.rotation = Quaternion.Slerp(m_cameraParent.rotation, m_lookTarget.rotation, m_turnInterpolate); //カメラの向きをターゲットの向きへ滑らかに動かす
+                //m_cameraParent.up = Vector3.Slerp(m_cameraParent.up, m_lookTarget.up, m_turnInterpolate);
             }
             m_camera.localRotation = Quaternion.Euler(m_offsetEulerAngle); // ターゲットに追従しているカメラの角度をここで任意にずらす
             m_camera.localPosition = m_offsetPosition; // 追従しているカメラの位置から任意の位置にずらす

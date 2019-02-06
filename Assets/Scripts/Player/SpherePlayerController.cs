@@ -5,11 +5,17 @@ using UnityEngine;
 namespace ReviewGames
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerSphereController : MonoBehaviour
+    public class SpherePlayerController : MonoBehaviour
     {
         #region Properties
         /// <summary>Input direction. コントローラーから入力されたベクトル</summary>
-        private Vector3 InputDir { get { return new Vector3(m_horizontal, 0, m_vertical); } }
+        public Vector3 InputDir
+        {
+            get
+            {
+                return new Vector3(m_horizontal, 0, m_vertical);
+            }
+        }
         #endregion
 
         #region Field
@@ -28,6 +34,7 @@ namespace ReviewGames
         float m_horizontal;
         /// <summary>横軸入力</summary>
         float m_vertical;
+        Vector3 m_previousPosition;
 
         /// <summary>操作の標準とする向き(基本メインカメラ)</summary>
         [Header("Components")]
@@ -70,13 +77,7 @@ namespace ReviewGames
             if (dir != Vector3.zero) // 移動している時
             {
                 dir = m_directionalStandard.TransformDirection(dir);//カメラに対して正面の向きに変換する
-                //transform.forward = Vector3.Slerp(transform.forward, dir, m_turnInterpolateAmount); // 入力された向きに対して少し遅延しながら入力方向に向かせる
                 m_rb.AddForce(dir * m_moveSpeed, ForceMode.Force);
-                //m_rb.velocity = dir * m_moveSpeed;
-            }
-            else // 移動していない時
-            {
-                    m_rb.velocity = Vector3.zero;
             }
         }
     }
