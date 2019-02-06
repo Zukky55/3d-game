@@ -10,20 +10,29 @@ namespace ReviewGames
     public class GravityController : MonoSingleton<GravityController>
     {
         #region Properties
-        /// <summary>現在の重力源</summary>
-        public GravitySource m_CurrentGravitySource { get; private set; }
+        /// <summary>現在の重力源のenum</summary>
+        public GravitySource CurrentGravitySource { get; private set; }
+        /// <summary>変更前の重力ベクトル</summary>
+        public Vector3 PreviousGravity { get; private set; }
         #endregion
 
         #region Fields
         /// <summary>重力加速度</summary>
         [SerializeField] float m_gravitationalAcceleration = 9.18f;
 
+        /// <summary>Gravity関係のイベント用デリゲート</summary>
+        public delegate void GravityEvent();
+        /// <summary>重力を変化した時に発行されるイベント</summary>
+        public static event GravityEvent OnChangeGravity;
+        /// <summary>重力をResetした時に発行されるイベント</summary>
+        public static event GravityEvent OnResetGravity;
+
         #endregion
 
         #region Methods
         private void OnEnable()
         {
-            m_CurrentGravitySource = GravitySource.Down;
+            CurrentGravitySource = GravitySource.Down;
         }
 
         /// <summary>
@@ -40,7 +49,11 @@ namespace ReviewGames
                 if (go.tag == "GravitySource")
                 {
                     Physics.gravity = go.transform.position;
-                    m_CurrentGravitySource = GravitySource.Other;
+                    CurrentGravitySource = GravitySource.Other;
+                    // =========
+                    // Issue an event
+                    // =========
+                    OnChangeGravity();
                 }
             }
         }
@@ -52,38 +65,42 @@ namespace ReviewGames
         /// <param name="direction"></param>
         public void ChangeGravitySource(Transform target, GravitySource direction)
         {
+            PreviousGravity = Physics.gravity;
             Vector3 targetSource;
             switch (direction)
             {
                 case GravitySource.Forward:
                     targetSource = target.forward * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Forward;
+                    CurrentGravitySource = GravitySource.Forward;
                     break;
                 case GravitySource.Back:
                     targetSource = -target.forward * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Back;
+                    CurrentGravitySource = GravitySource.Back;
                     break;
                 case GravitySource.Right:
                     targetSource = target.right * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Right;
+                    CurrentGravitySource = GravitySource.Right;
                     break;
                 case GravitySource.Left:
                     targetSource = -target.right * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Left;
+                    CurrentGravitySource = GravitySource.Left;
                     break;
                 case GravitySource.Up:
                     targetSource = target.up * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Up;
+                    CurrentGravitySource = GravitySource.Up;
                     break;
                 case GravitySource.Down:
                     targetSource = -target.up * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Down;
+                    CurrentGravitySource = GravitySource.Down;
                     break;
                 default:
                     throw new System.ArgumentException("Invalid argument");
             }
             Physics.gravity = targetSource;
-            m_CurrentGravitySource = GravitySource.Other;
+            // =========
+            // Issue an event
+            // =========
+            OnChangeGravity();
         }
 
         /// <summary>
@@ -97,32 +114,36 @@ namespace ReviewGames
             {
                 case GravitySource.Forward:
                     targetSource = Vector3.forward * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Forward;
+                    CurrentGravitySource = GravitySource.Forward;
                     break;
                 case GravitySource.Back:
                     targetSource = Vector3.back * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Back;
+                    CurrentGravitySource = GravitySource.Back;
                     break;
                 case GravitySource.Right:
                     targetSource = Vector3.right * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Right;
+                    CurrentGravitySource = GravitySource.Right;
                     break;
                 case GravitySource.Left:
                     targetSource = Vector3.left * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Left;
+                    CurrentGravitySource = GravitySource.Left;
                     break;
                 case GravitySource.Up:
                     targetSource = Vector3.up * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Up;
+                    CurrentGravitySource = GravitySource.Up;
                     break;
                 case GravitySource.Down:
                     targetSource = Vector3.down * m_gravitationalAcceleration;
-                    m_CurrentGravitySource = GravitySource.Down;
+                    CurrentGravitySource = GravitySource.Down;
                     break;
                 default:
                     throw new System.ArgumentException("Invalid argument");
             }
             Physics.gravity = targetSource;
+            // =========
+            // Issue an event
+            // =========
+            OnChangeGravity();
         }
 
         /// <summary>
@@ -132,6 +153,10 @@ namespace ReviewGames
         public void ChangeGravitySource(GameObject gravitySourceObject)
         {
             Physics.gravity = gravitySourceObject.transform.position;
+            // =========
+            // Issue an event
+            // =========
+            OnChangeGravity();
         }
 
         /// <summary>
@@ -140,6 +165,10 @@ namespace ReviewGames
         public void ResetGravitySource()
         {
             Physics.gravity = Vector3.down * m_gravitationalAcceleration;
+            // =========
+            // Issue an event
+            // =========
+            OnResetGravity();
         }
         #endregion
 

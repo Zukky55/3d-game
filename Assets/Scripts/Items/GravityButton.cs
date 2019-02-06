@@ -11,7 +11,6 @@ namespace ReviewGames
     public class GravityButton : ButtonBase
     {
         [Header("Componets")]
-        [SerializeField] Transform m_player; // 現状使う予定なし
         GravityController m_gravityController;
 
         [Header("Parameters")]

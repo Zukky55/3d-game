@@ -23,10 +23,5 @@ namespace ReviewGames
         }
 
         protected abstract void Activate();
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

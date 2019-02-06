@@ -26,8 +26,7 @@ namespace ReviewGames
         /// <summary>追従するカメラの向きに角度をつけるパラメータ</summary>
         [SerializeField] Vector2 m_offsetEulerAngle;
 
-
-        private void Start()
+        private void OnEnable()
         {
             m_cameraParent = transform; // カメラのpivot
             m_cameraChild = m_cameraParent.GetChild(0); // pivotからの距離を管理するオブジェクト
