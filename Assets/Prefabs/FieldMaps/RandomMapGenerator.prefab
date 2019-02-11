@@ -35,7 +35,7 @@ Transform:
   m_GameObject: {fileID: 1431287695068480}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -53,9 +53,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_width: 50
   m_depth: 50
-  m_needToCollider: 0
+  m_needToCollider: 1
   m_maxHeight: 10
   m_isPerlinNoiseMap: 1
   m_intensity: 15
-  m_isSmoothness: 0
+  m_isSmoothness: 1
   m_mapSize: 1

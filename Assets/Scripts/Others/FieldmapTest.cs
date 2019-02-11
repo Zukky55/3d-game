@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace ReviewGames
 {
-    public class FieldmapController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public class FieldmapTest : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler,IPointerDownHandler
     {
         Rigidbody rb;
 
@@ -33,7 +33,12 @@ namespace ReviewGames
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("yobaretao");
+            Debug.Log("OnPointerClick yobaretao");
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            Debug.Log("OnPointerDown yobaretao");
         }
     }
 }
