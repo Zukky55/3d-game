@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleApplication1.Maze
+namespace Example
 {
     public class MazeCreator_Extend
     {
