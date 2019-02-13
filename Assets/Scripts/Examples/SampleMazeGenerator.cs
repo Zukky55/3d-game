@@ -8,8 +8,8 @@ namespace ConsoleApplication1.Maze
     {
         // 2次元配列の迷路情報
         private int[,] Maze;
-        public int Width { get; }
-        public int Height { get; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         // 乱数生成用
         private Random Random;
@@ -162,8 +162,8 @@ namespace ConsoleApplication1.Maze
         // デバッグ用処理
         public static void DebugPrint(int[,] maze)
         {
-            Console.WriteLine($"Width: {maze.GetLength(0)}");
-            Console.WriteLine($"Height: {maze.GetLength(1)}");
+            //Console.WriteLine($"Width: {0}", maze.GetLength(0));
+            //Console.WriteLine($"Height: {0}", maze.GetLength(1));
             for (int y = 0; y < maze.GetLength(1); y++)
             {
                 for (int x = 0; x < maze.GetLength(0); x++)

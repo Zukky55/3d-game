@@ -116,8 +116,7 @@ namespace Example
                         RecursiveLoad(LoadEvenPoint[rnd.Next(LoadEvenPoint.Count)]);
                     }
                     //掘削ポイントがもうない場合は終了する
-                    return;
-                    break;
+                    return; 
             }
             //掘る先を掘削リストに追加
             LoadEvenPoint.Add(target);
