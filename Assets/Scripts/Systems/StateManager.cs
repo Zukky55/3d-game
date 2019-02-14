@@ -43,7 +43,7 @@ namespace ReviewGames
         public class StateMachine
         {
             /// <summary>Represents the current state.</summary>
-            public State m_State = State.InTheGame;
+            public State m_State = State.InitGame;
             /// <summary>The previous state.</summary>
             public State m_PreviousState;
 

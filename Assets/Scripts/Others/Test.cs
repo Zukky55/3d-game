@@ -1,24 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿//using System.Collections;
+//using System.Collections.Generic;
+//using UnityEngine;
+//using ReviewGames;
 
-namespace Test
-{
+//namespace Test
+//{
 
 
-    public class Test : MonoBehaviour
-    {
-        Coordinate a, w;
-        private void Start()
-        {
-            a = w = new Coordinate();
-            w.x = w.x = 10;
-            Debug.Log("w.x = "+w.x + " a.x is " +a.x);
-        }
-    }
+//    public class Test : MonoBehaviour
+//    {
+//        private void Start()
+//        {
+//            var a = new DungeonMapIndex(1, 2, 3);
+//            var b = new DungeonMapIndex(1, 2, 3);
+//            var c = new DungeonMapIndex(3,2,1);
 
-    public class Coordinate
-    {
-        public int x, y, z;
-    }
-}
+//            if (a == b)
+//                Debug.Log("a == b");
+//            if(!(a == c))
+//            {
+//                Debug.Log("!(a ==c)");
+//            }
+
+
+//        }
+
+//    }
+//}

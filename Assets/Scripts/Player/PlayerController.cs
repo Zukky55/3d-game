@@ -177,6 +177,18 @@ namespace ReviewGames
         }
 
         /// <summary>
+        /// ジャンプ処理
+        /// </summary>
+        void Jump()
+        {
+            if(!m_isGrounded)
+            {
+                return;
+            }
+            m_rb.AddForce(-Physics.gravity, ForceMode.Impulse);
+        }
+
+        /// <summary>
         /// animator state machineのステート一覧
         /// </summary>
         public enum AnimState
