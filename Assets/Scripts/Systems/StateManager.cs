@@ -23,6 +23,11 @@ namespace ReviewGames
             public StateMachineEvent() { }
         }
 
+        private void Start()
+        {
+            TransitionState(StateMachine.State.InitGame);
+        }
+
         /// <summary>
         /// Issue an event after changing the state. ステートを変更した後イベントを発行する
         /// </summary>
@@ -43,7 +48,7 @@ namespace ReviewGames
         public class StateMachine
         {
             /// <summary>Represents the current state.</summary>
-            public State m_State = State.InitGame;
+            public State m_State;
             /// <summary>The previous state.</summary>
             public State m_PreviousState;
 

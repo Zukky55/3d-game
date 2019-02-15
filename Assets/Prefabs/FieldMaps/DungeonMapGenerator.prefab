@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cd02cdf2dd1f5643a401575da6de486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_mapSize: 300
   m_width: 10
   m_height: 10
   m_depth: 10
   m_needToCollider: 1
-  m_mapSize: 10
   margin: 2

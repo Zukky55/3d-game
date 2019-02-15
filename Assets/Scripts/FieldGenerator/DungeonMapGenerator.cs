@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,15 +10,26 @@ namespace ReviewGames
     /// </summary>
     public class DungeonMapGenerator : MonoBehaviour
     {
-        /// <summary>DungeonMapの状態を表す三次元配列[x,y,z]</summary>
-        public DungeonMapObject[,,] DungeonMap { get; private set; }
         /// <summary>DungeonMapのオブジェクト群</summary>
         public List<GameObject> DungeonMapObjects { get; private set; }
         /// <summary>DungeonMapのコンポーネント群</summary>
         public List<DungeonMapObject> DungeonMapComponents { get; private set; }
         /// <summary>道の偶数地点</summary>
         public List<DungeonMapObject> RoadEvenCell { get; private set; }
+        /// <summary>スタート地点</summary>
         public DungeonMapObject StartPoint { get; private set; }
+        /// <summary>ゴール地点</summary>
+        public DungeonMapObject GoalPoint { get; private set; }
+
+        StateManager m_stateManager;
+        GameObject m_glassPrefab;
+        GameObject m_brickPrefab;
+
+
+
+        /// <summary>map size</summary>
+        [Header("Can be changed during execution.")]
+        [SerializeField] float m_mapSize;
 
         /// <summary>幅</summary>
         [Header("Can't be changed during execution.")]
@@ -30,8 +40,6 @@ namespace ReviewGames
         [SerializeField] int m_depth;
         /// <summary>コライダーを必要とするかどうか</summary>
         [SerializeField] bool m_needToCollider;
-        /// <summary>map size</summary>
-        [SerializeField] float m_mapSize = 1f;
         /// <summary>迷路の外周分の余白</summary>
         [SerializeField] int margin = 2;
         /// <summary>ゴール地点を設定しているかどうか</summary>
@@ -48,12 +56,22 @@ namespace ReviewGames
             m_height += margin;
             m_depth += margin;
 
-            DungeonMap = new DungeonMapObject[m_width, m_height, m_depth];
+            // Loading prefab from Resources folder.
+            m_glassPrefab = Resources.Load<GameObject>("Glass");
+            m_brickPrefab = Resources.Load<GameObject>("BrickTile");
+
             RoadEvenCell = new List<DungeonMapObject>();
             DungeonMapObjects = new List<GameObject>();
             DungeonMapComponents = new List<DungeonMapObject>();
+            m_stateManager = StateManager.Instance;
 
-            Setup();
+            m_stateManager.m_BehaviourByState.AddListener(state =>
+            {
+                if (state == StateManager.StateMachine.State.InitGame)
+                {
+                    Setup();
+                }
+            });
         }
 
         private void OnValidate()
@@ -63,9 +81,11 @@ namespace ReviewGames
             {
                 return;
             }
-            // マップサイズに合わせてScale変更
+            // mapSizeに合わせてScale変更
             transform.localScale = new Vector3(m_mapSize, m_mapSize, m_mapSize);
         }
+
+
 
         /// <summary>
         /// マップ配列の各要素に役割を割り当てる
@@ -80,9 +100,19 @@ namespace ReviewGames
                     for (int x = 0; x < m_width; x++)
                     {
                         // PrimitiveObject"Cube"を作成.座標を任意のSizeに応じて設定し親子関係をつける
+                        //GameObject cube;
+                        //if (x % 2 == 1 & y % 2 == 1 & z % 2 == 1) // 奇数の時はGlass,偶数の時はBrickTileとする
+                        //{
+                        //    cube = Instantiate(m_glassPrefab, transform);
+                        //}
+                        //else
+                        //{
+                        //    cube = Instantiate(m_brickPrefab, transform);
+                        //}
                         var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        cube.transform.localPosition = new Vector3(x, y, z);
                         cube.transform.SetParent(transform);
+                        cube.transform.localScale = Vector3.one;
+                        cube.transform.localPosition = new Vector3(x, y, z);
                         // もしコライダーが必要なければ消す
                         if (!m_needToCollider)
                         {
@@ -92,7 +122,6 @@ namespace ReviewGames
                         var component = cube.AddComponent<DungeonMapObject>();
                         DungeonMapObjects.Add(cube);
                         DungeonMapComponents.Add(component);
-                        DungeonMap[x, y, z] = component;
                         // 各面において余白の場合掘削不可能壁に. それ以外は掘削可能壁に設定.
                         if (y < margin | y >= m_height - margin
                             | z < margin | z >= m_depth - margin
@@ -127,6 +156,11 @@ namespace ReviewGames
             var startCell = DungeonMapComponents.Find(item => item.Index == target);
             startCell.Status = CellStatus.Start;
             RoadEvenCell.Add(startCell);
+            StartPoint = startCell;
+            // playerをスタート地点に立たせる
+            var pos = startCell.gameObject.transform.position;
+            var player = GameObject.FindGameObjectWithTag("Player");
+            player.transform.position = new Vector3(pos.x, pos.y, pos.z);
             return startCell;
         }
 
@@ -177,6 +211,7 @@ namespace ReviewGames
                     {
                         m_isGoalSet = true;
                         startPoint.Status = CellStatus.Goal;
+                        GoalPoint = startPoint;
                     }
                     RoadEvenCell.Remove(startPoint);
 
@@ -187,6 +222,7 @@ namespace ReviewGames
                     }
                     // 掘削ポイントがもうない場合は終了し結果をオブジェクトに同期
                     Sync();
+
                     return;
             }
             // 対象と中間を掘る
@@ -205,28 +241,18 @@ namespace ReviewGames
         {
             DungeonMapComponents.ForEach(item =>
             {
-                Color color = Color.black;
                 switch (item.Status)
                 {
                     case CellStatus.Road:
-                        Destroy(item.gameObject);
+                    case CellStatus.Goal:
+                    case CellStatus.Start:
+                        item.gameObject.SetActive(false);
                         break;
                     case CellStatus.DigableWall:
-                        ColorUtility.TryParseHtmlString("#FF0000FF", out color); // Color that looks grass.
-                        break;
                     case CellStatus.UndigableWall:
-                        ColorUtility.TryParseHtmlString("#00FF0022", out color); // Color that looks water.
-                        break;
-                    case CellStatus.Goal:
-                        ColorUtility.TryParseHtmlString("#0000FFFF", out color); // Color that looks lava.
-                        break;
-                    case CellStatus.Start:
-                        ColorUtility.TryParseHtmlString("#FFFFFFFF", out color); // Color that looks lava.
-                        break;
-                    default:
+                        item.GetComponent<MeshRenderer>().material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 0.1f);
                         break;
                 }
-                item.GetComponent<MeshRenderer>().material.color = color;
             });
         }
 
@@ -243,7 +269,7 @@ namespace ReviewGames
             int evenNum = 1;
             while (evenNum % 2 == 1)
             {
-                evenNum = UnityEngine.Random.Range(min, max);
+                evenNum = Random.Range(min, max);
             }
             return evenNum;
         }
@@ -265,7 +291,7 @@ namespace ReviewGames
 
             while (dir.Count > 0)
             {
-                var checkDir = dir[UnityEngine.Random.Range(0, dir.Count)];
+                var checkDir = dir[Random.Range(0, dir.Count)];
                 var checkIndex = new DungeonMapIndex();
 
                 checkIndex = dmo.Index;
@@ -293,10 +319,8 @@ namespace ReviewGames
                         break;
                 }
                 Debug.Log("checkIndex is : " + checkIndex.x + "," + checkIndex.y + "," + checkIndex.z);
-                var targetCell = DungeonMap[checkIndex.x, checkIndex.y, checkIndex.z];
-                if (targetCell == null)
-                {
-                }
+                var targetCell = DungeonMapComponents.Find(item => item.Index == checkIndex);
+
                 if (targetCell.Status == CellStatus.DigableWall) // 対象のマスのステータスが掘削可能ならその向きを返す
                 {
                     return checkDir;
