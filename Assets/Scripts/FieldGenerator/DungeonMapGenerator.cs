@@ -19,6 +19,7 @@ namespace ReviewGames
         public List<DungeonMapObject> DungeonMapComponents { get; private set; }
         /// <summary>道の偶数地点</summary>
         public List<DungeonMapObject> RoadEvenCell { get; private set; }
+        public DungeonMapObject StartPoint { get; private set; }
 
         /// <summary>幅</summary>
         [Header("Can't be changed during execution.")]
