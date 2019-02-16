@@ -178,7 +178,7 @@ namespace ReviewGames
         /// </summary>
         void DisplayText()
         {
-            m_timerText.text = string.Format("{0:00}:{1:#.###}", m_minute, m_seconds);
+            m_timerText.text = string.Format("{0:00}:{1:00}", m_minute, m_seconds);
         }
         #endregion
     }

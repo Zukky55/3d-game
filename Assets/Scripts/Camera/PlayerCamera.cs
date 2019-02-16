@@ -33,6 +33,14 @@ namespace ReviewGames
             m_camera = m_cameraChild.GetChild(0); // カメラ自身
         }
 
+        private void Awake()
+        {
+            if(!m_lookTarget)
+            {
+                m_lookTarget = GameObject.FindWithTag("Player").transform;
+            }
+        }
+
         private void Update()
         {
             m_cameraParent.position = Vector3.Slerp(m_cameraParent.position, m_lookTarget.position, m_positionInterpolate); //カメラの座標をターゲットの座標へ滑らかに動かす

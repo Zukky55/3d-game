@@ -10,7 +10,7 @@ namespace ReviewGames
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player")
+            if (other.gameObject.tag == "Player" && StateManager.Instance.m_StateMachine.m_State == StateManager.StateMachine.State.InTheGame)
             {
                 StateManager.Instance.TransitionState(m_state);
             }

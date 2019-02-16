@@ -16,6 +16,22 @@ namespace ReviewGames
         {
             m_stateManager = StateManager.Instance;
             m_stateManager.TransitionState(StateManager.StateMachine.State.InitGame);
+            m_stateManager.m_BehaviourByState.AddListener(state =>
+            {
+                switch (state)
+                {
+                    case StateManager.StateMachine.State.InitGame:
+                    case StateManager.StateMachine.State.Pause:
+                        Time.timeScale = 0f;
+                        break;
+                    case StateManager.StateMachine.State.InTheGame:
+                        Time.timeScale = 1f;
+                        break;
+                    case StateManager.StateMachine.State.GameOver:
+                    case StateManager.StateMachine.State.GameClear:
+                        break;
+                }
+            });
         }
 
         private void OnEnable()

@@ -44,7 +44,7 @@ namespace ReviewGames
         /// <summary>ジャンプ力を調整するパラメータ</summary>
         [SerializeField] float m_jumpPower = 10f;
         // 重力加速度を調整するパラメーター
-        [SerializeField] float m_gravityMultiplier = 1f;
+        [SerializeField] float m_gravityMultiplier = 1f;//==============================never used======================================================
         /// <summary>Jump出来る回数</summary>
         [SerializeField] int m_possibleCountOfJump;
 
@@ -208,7 +208,7 @@ namespace ReviewGames
         {
             if (IsPossibleToJump)
             {
-                m_rb.AddForce(-Physics.gravity, ForceMode.Impulse);
+                m_rb.AddForce(-Physics.gravity * m_jumpPower, ForceMode.Impulse);
             }
         }
 
