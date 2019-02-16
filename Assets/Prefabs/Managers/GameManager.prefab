@@ -19,8 +19,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4666494796817208}
-  - component: {fileID: 114503176180506172}
-  - component: {fileID: 114901343640420450}
   - component: {fileID: 114872055118992568}
   m_Layer: 0
   m_Name: GameManager
@@ -42,18 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114503176180506172
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1786889011566500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3d32bdf02e024b3e9aad0c56c4ce860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_gravitationalAcceleration: 9.18
 --- !u!114 &114872055118992568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -68,14 +54,3 @@ MonoBehaviour:
   ShootingCamera: {fileID: 0}
   DetectFlick: 1
   Divisor: 10
---- !u!114 &114901343640420450
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1786889011566500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c6694b7928feeb4fbabdb8395383cd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ReviewGames
 {
+    /// <summary>
+    /// Countdown.
+    /// </summary>
     public class Timer : MonoBehaviour
     {
         #region Field
@@ -12,11 +16,11 @@ namespace ReviewGames
         public delegate void CountDownEvent();
 
         /// <summary>カウントダウン開始時に発行されるイベント</summary>
-        public static event CountDownEvent OnStartCountDown;
+        public static event CountDownEvent OnStartCountDown = () => { };
         /// <summary>カウントダウン中毎フレーム発行されるイベント</summary>
-        public static event CountDownEvent OnDuringCountDown;
+        public static event CountDownEvent OnDuringCountDown = () => { };
         /// <summary>カウントダウン終了時に発行されるイベント</summary>
-        public static event CountDownEvent OnEndCountDown;
+        public static event CountDownEvent OnEndCountDown = () => { };
 
         [Header("Parameters")]
 
@@ -34,10 +38,50 @@ namespace ReviewGames
         [Header("Components")]
 
         /// <summary>残り時間を表示するテキスト</summary>
-        [SerializeField] Text m_timerText;
+        [SerializeField] TextMeshProUGUI m_timerText;
+        /// <summary>StateMachine</summary>
+        StateManager m_stateManager;
 
         #endregion
         #region Method
+        private void Awake()
+        {
+            m_stateManager = StateManager.Instance;
+
+            m_stateManager.m_BehaviourByState.AddListener(state =>
+            {
+                switch (state)
+                {
+                    case StateManager.StateMachine.State.InitGame:
+                        m_timerText.enabled = false;
+                        break;
+
+                    case StateManager.StateMachine.State.InTheGame:
+                        switch (m_stateManager.m_StateMachine.m_PreviousState)
+                        {
+                            // Timer開始処理
+                            case StateManager.StateMachine.State.InitGame:
+                                m_timerText.enabled = true;
+                                StartCountDown();
+                                break;
+                            // Pauseから遷移してきた時は再開処理
+                            case StateManager.StateMachine.State.Pause:
+                                m_toggle = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+
+                    case StateManager.StateMachine.State.Pause:
+                        m_toggle = false;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
         void Update()
         {
             if (m_toggle)
@@ -77,8 +121,7 @@ namespace ReviewGames
             // =============
             // Event call
             // =============
-            if (OnStartCountDown != null)
-                OnStartCountDown();
+            OnStartCountDown();
         }
 
         /// <summary>
@@ -92,8 +135,7 @@ namespace ReviewGames
             // =============
             // Event call
             // =============
-            if (OnStartCountDown != null)
-                OnStartCountDown();
+            OnStartCountDown();
         }
 
         /// <summary>
@@ -104,8 +146,7 @@ namespace ReviewGames
             // =============
             // Event call
             // =============
-            if (OnDuringCountDown != null)
-                OnDuringCountDown();
+            OnDuringCountDown();
 
             //  カウントダウン処理を行う. 残り時間が0になったら終了しイベントを発行する
             m_seconds -= Time.deltaTime;
@@ -120,8 +161,7 @@ namespace ReviewGames
                     // =============
                     // Event call
                     // =============
-                    if (OnEndCountDown != null)
-                        OnEndCountDown();
+                    OnEndCountDown();
                 }
 
                 if (m_minute > 0)
@@ -138,7 +178,7 @@ namespace ReviewGames
         /// </summary>
         void DisplayText()
         {
-            m_timerText.text = "あと" + m_minute + "分" + (int)m_seconds + "秒";
+            m_timerText.text = string.Format("{0:00}:{1:#.###}", m_minute, m_seconds);
         }
         #endregion
     }

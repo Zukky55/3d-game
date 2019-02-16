@@ -12,7 +12,7 @@ namespace ReviewGames
 
         void Update()
         {
-            transform.Rotate(new Vector3(m_xAxis,m_yAxis,m_zAxis) * Time.deltaTime);
+            transform.Rotate(new Vector3(m_xAxis, m_yAxis, m_zAxis) * Time.deltaTime);
         }
     }
 }

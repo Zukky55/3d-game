@@ -16,6 +16,21 @@ namespace ReviewGames
                 return new Vector3(m_horizontal, 0, m_vertical);
             }
         }
+
+        /// <summary>Jump可能かどうか</summary>
+        public bool IsPossibleToJump
+        {
+            get
+            {
+                if (m_isGrounded)
+                {
+                    m_jumpCounter = m_possibleCountOfJump;
+                }
+                var result = m_jumpCounter > 0;
+                m_jumpCounter--;
+                return result;
+            }
+        }
         #endregion
 
         #region Field
@@ -30,6 +45,11 @@ namespace ReviewGames
         [SerializeField] float m_jumpPower = 10f;
         // 重力加速度を調整するパラメーター
         [SerializeField] float m_gravityMultiplier = 1f;
+        /// <summary>Jump出来る回数</summary>
+        [SerializeField] int m_possibleCountOfJump;
+
+        /// <summary>IsPossbleToJumpのバッキングフィールド</summary>
+        int m_jumpCounter;
         /// <summary>縦軸入力</summary>
         float m_horizontal;
         /// <summary>横軸入力</summary>
@@ -71,6 +91,11 @@ namespace ReviewGames
             //方向の入力を取得する
             m_horizontal = (Input.GetAxisRaw("Horizontal") == 0f) ? m_FJoyStick.Horizontal : Input.GetAxisRaw("Horizontal"); //方向キーの入力が無い時はジョイスティックから入力をとる
             m_vertical = (Input.GetAxisRaw("Vertical") == 0f) ? m_FJoyStick.Vertical : Input.GetAxisRaw("Vertical"); // 方向キーの入力が無い時はジョイスティックから入力をとる
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
         }
 
         /// <summary>
@@ -181,11 +206,10 @@ namespace ReviewGames
         /// </summary>
         void Jump()
         {
-            if(!m_isGrounded)
+            if (IsPossibleToJump)
             {
-                return;
+                m_rb.AddForce(-Physics.gravity, ForceMode.Impulse);
             }
-            m_rb.AddForce(-Physics.gravity, ForceMode.Impulse);
         }
 
         /// <summary>

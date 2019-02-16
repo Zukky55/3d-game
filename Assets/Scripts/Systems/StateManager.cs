@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace ReviewGames
 {
     /// <summary>
-    /// Stage manager.
+    /// State machine.
     /// </summary>
     public class StateManager : MonoSingleton<StateManager>
     {
@@ -45,12 +45,13 @@ namespace ReviewGames
         /// <summary>
         /// State machine.
         /// </summary>
+        [System.Serializable]
         public class StateMachine
         {
             /// <summary>Represents the current state.</summary>
-            public State m_State;
+            [SerializeField] public State m_State;
             /// <summary>The previous state.</summary>
-            public State m_PreviousState;
+            [SerializeField] public State m_PreviousState;
 
             /// <summary>
             /// States.
@@ -62,6 +63,7 @@ namespace ReviewGames
                 GameOver,
                 GameClear,
                 Pause,
+                NextStage,
             }
         }
     }
