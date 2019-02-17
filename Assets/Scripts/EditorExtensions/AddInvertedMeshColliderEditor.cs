@@ -5,6 +5,7 @@ using UnityEditor;
 
 namespace ReviewGames
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(AddInvertedMeshCollider))]
     public class AddInvertedMeshColliderEditor : Editor
     {
@@ -18,4 +19,5 @@ namespace ReviewGames
             }
         }
     }
+#endif
 }

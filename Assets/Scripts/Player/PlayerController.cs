@@ -43,8 +43,6 @@ namespace ReviewGames
         [SerializeField] float m_turnInterpolateAmount = 1f;
         /// <summary>ジャンプ力を調整するパラメータ</summary>
         [SerializeField] float m_jumpPower = 10f;
-        // 重力加速度を調整するパラメーター
-        [SerializeField] float m_gravityMultiplier = 1f;//==============================never used======================================================
         /// <summary>Jump出来る回数</summary>
         [SerializeField] int m_possibleCountOfJump;
 
@@ -56,18 +54,29 @@ namespace ReviewGames
         float m_vertical;
         /// <summary>地面に着いているかどうか</summary>
         bool m_isGrounded;
+        /// <summary>同じColliderに接触している時間</summary>
+        float m_collisionStaySeconds;
 
         /// <summary>操作の標準とする向き(基本メインカメラ)</summary>
         [Header("Components")]
         [SerializeField] Transform m_directionalStandard;
-        /// <summary>アタッチされているRigidbody</summary>
-        Rigidbody m_rb;
         /// <summary>浮動ジョイスティック</summary>
         [SerializeField] FloatingJoystick m_FJoyStick;
+        /// <summary>dungeon generator</summary>
+        [SerializeField] DungeonGenerator m_dungeonGenerator;
+        /// <summary>audio source</summary>
+        [SerializeField] AudioSource m_audioSource;
+        /// <summary>jump sound effect</summary>
+        [SerializeField] AudioClip m_jumpSE;
+        /// <summary>アタッチされているRigidbody</summary>
+        Rigidbody m_rb;
         /// <summary>同じオブジェクトに追加された Animator への参照</summary>
         Animator m_anim;
         /// <summary>重力操作クラス</summary>
         GravityController m_gravityController;
+        /// <summary>State machine</summary>
+        StateManager m_stateManager;
+
         #endregion
 
         private void OnEnable()
@@ -75,6 +84,7 @@ namespace ReviewGames
             m_rb = GetComponent<Rigidbody>();
             m_anim = GetComponent<Animator>();
             m_gravityController = GravityController.Instance;
+            m_stateManager = StateManager.Instance;
             GravityController.OnChangeGravity += SyncGravitySource;
         }
 
@@ -204,11 +214,12 @@ namespace ReviewGames
         /// <summary>
         /// ジャンプ処理
         /// </summary>
-        void Jump()
+        public void Jump()
         {
-            if (IsPossibleToJump)
+            if (IsPossibleToJump && m_stateManager.m_StateMachine.m_State == StateManager.StateMachine.State.InTheGame)
             {
                 m_rb.AddForce(-Physics.gravity * m_jumpPower, ForceMode.Impulse);
+                m_audioSource.PlayOneShot(m_jumpSE);
             }
         }
 

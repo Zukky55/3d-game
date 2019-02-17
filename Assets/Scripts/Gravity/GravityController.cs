@@ -26,7 +26,6 @@ namespace ReviewGames
         public static event GravityEvent OnChangeGravity;
         /// <summary>重力をResetした時に発行されるイベント</summary>
         public static event GravityEvent OnResetGravity;
-
         #endregion
 
         #region Methods

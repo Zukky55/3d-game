@@ -13,7 +13,7 @@ namespace ReviewGames
         #endregion
 
         #region Method
-        void Start()
+        void OnEnable()
         {
             background.gameObject.SetActive(false);
         }

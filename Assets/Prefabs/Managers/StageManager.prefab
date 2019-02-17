@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c82e256469946d2afece25cfcd3dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_setMinute: 1
+  m_setMinute: 10
   m_setSeconds: 0
   m_timerText: {fileID: 0}
 --- !u!114 &114585276380893150
@@ -95,3 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_timer: {fileID: 114437073330693878}
+  m_joystick: {fileID: 0}

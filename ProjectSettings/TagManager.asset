@@ -7,6 +7,10 @@ TagManager:
   - GravitySource
   - Cell
   - Portal
+  - Item
+  - GoalPortal
+  - Coin
+  - GravityBall
   layers:
   - Default
   - TransparentFX

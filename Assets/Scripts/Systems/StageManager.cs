@@ -11,6 +11,7 @@ namespace ReviewGames
     {
         StateManager m_stateManager;
         [SerializeField] Timer m_timer;
+        [SerializeField] FloatingJoystick m_joystick;
 
         private void Awake()
         {
@@ -22,13 +23,16 @@ namespace ReviewGames
                 {
                     case StateManager.StateMachine.State.InitGame:
                     case StateManager.StateMachine.State.Pause:
+                        m_joystick.gameObject.SetActive(false);
                         Time.timeScale = 0f;
                         break;
                     case StateManager.StateMachine.State.InTheGame:
+                        m_joystick.gameObject.SetActive(true);
                         Time.timeScale = 1f;
                         break;
                     case StateManager.StateMachine.State.GameOver:
                     case StateManager.StateMachine.State.GameClear:
+                        m_joystick.gameObject.SetActive(false);
                         break;
                 }
             });
