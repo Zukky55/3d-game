@@ -13,7 +13,6 @@ namespace ReviewGames
         {
             if (collision.gameObject.tag == "Player"  )
             {
-                ScoreManager.Instance.AddScore(m_point);
                 m_audioSource.Play();
                 Destroy(GetComponent<Renderer>());
                 Destroy(GetComponent<Collider>());

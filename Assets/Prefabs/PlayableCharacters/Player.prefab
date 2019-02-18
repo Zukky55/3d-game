@@ -4532,6 +4532,8 @@ MonoBehaviour:
   m_turnInterpolateAmount: 1
   m_jumpPower: 1
   m_possibleCountOfJump: 5
+  m_fallingVelocity: 1.5
+  m_possibleCountOfGravityInverse: 10
   m_directionalStandard: {fileID: 0}
   m_FJoyStick: {fileID: 0}
   m_dungeonGenerator: {fileID: 0}

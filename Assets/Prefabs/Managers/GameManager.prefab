@@ -53,9 +53,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526829da22cd0a04291de8e8304e9b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_scoreText: {fileID: 0}
+  m_portalCountTextBox: {fileID: 0}
   m_score: 0
   m_highScore: 0
-  m_scoreText: {fileID: 0}
+  m_currentPortalCount: 0
+  m_totalPortalCount: 0
 --- !u!114 &114432393475374976
 MonoBehaviour:
   m_ObjectHideFlags: 1

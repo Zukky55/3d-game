@@ -15,13 +15,13 @@ namespace ReviewGames
             m_stateManager = StateManager.Instance;
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
-            if (collision.gameObject.tag == "Player" && m_stateManager.m_StateMachine.m_State == StateManager.StateMachine.State.InTheGame)
+            if (other.gameObject.tag == "Player" && m_stateManager.m_StateMachine.m_State == StateManager.StateMachine.State.InTheGame)
             {
-                ScoreManager.Instance.AddScore(m_point);
-                Destroy(GetComponent<Renderer>());
+                StageManager.Instance.AddPortals();
                 Destroy(GetComponent<Collider>());
+                Destroy(transform.GetChild(0).gameObject);
                 m_audioSource.Play();
                 Destroy(gameObject, 3f);
             }

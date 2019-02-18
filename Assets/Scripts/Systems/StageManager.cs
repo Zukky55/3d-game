@@ -1,22 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ReviewGames
 {
     /// <summary>
     /// Stage manager.
     /// </summary>
-    public class StageManager : MonoBehaviour
+    public class StageManager : MonoSingleton<StageManager>
     {
-        StateManager m_stateManager;
+        public int TotalPortalCount { get; private set; }
+        public int CurrentPortalCount { get; private set; }
+
         [SerializeField] Timer m_timer;
         [SerializeField] FloatingJoystick m_joystick;
+        [SerializeField] Image m_gameClearImage;
+        StateManager m_stateManager;
+        ScoreManager m_scoreManager;
+        DungeonGenerator m_dungeonGenerator;
 
         private void Awake()
         {
             m_stateManager = StateManager.Instance;
-            m_stateManager.TransitionState(StateManager.StateMachine.State.InitGame);
+            m_scoreManager = ScoreManager.Instance;
+            m_dungeonGenerator = DungeonGenerator.Instance;
+            SetupEvents();
+        }
+
+        private void OnEnable()
+        {
+            Timer.OnEndCountDown += MigrateStateToGameOver;
+        }
+
+        private void OnDisable()
+        {
+            Timer.OnEndCountDown -= MigrateStateToGameOver;
+        }
+
+        void Initialize()
+        {
+
+        }
+
+        void SetupEvents()
+        {
             m_stateManager.m_BehaviourByState.AddListener(state =>
             {
                 switch (state)
@@ -31,22 +59,36 @@ namespace ReviewGames
                         Time.timeScale = 1f;
                         break;
                     case StateManager.StateMachine.State.GameOver:
+                        m_joystick.gameObject.SetActive(false);
+                        break;
                     case StateManager.StateMachine.State.GameClear:
+                        m_gameClearImage.enabled = true;
                         m_joystick.gameObject.SetActive(false);
                         break;
                 }
             });
+
+            m_stateManager.TransitionState(StateManager.StateMachine.State.InitGame);
         }
 
-        private void OnEnable()
+        public void SetupPortals(int totalPortals)
         {
-            Timer.OnEndCountDown += MigrateStateToGameOver;
+            TotalPortalCount = totalPortals;
+            ScoreManager.Instance.DisplayPortalCount(CurrentPortalCount, totalPortals);
         }
 
-        private void OnDisable()
+       public void AddPortals()
         {
-            Timer.OnEndCountDown -= MigrateStateToGameOver;
+            CurrentPortalCount++;
+            ScoreManager.Instance.DisplayPortalCount(CurrentPortalCount, TotalPortalCount);
+
+            if(CurrentPortalCount == TotalPortalCount)
+            {
+                m_stateManager.TransitionState(StateManager.StateMachine.State.GameClear);
+            }
         }
+
+
 
         /// <summary>
         /// Migrate state of State machine  to "GameOver"

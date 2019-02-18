@@ -54,9 +54,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4109019952193528}
-  - component: {fileID: 65824923533007852}
   - component: {fileID: 114302010472082116}
   - component: {fileID: 82460867583175624}
+  - component: {fileID: 135231374360838178}
   m_Layer: 0
   m_Name: Portal_green
   m_TagString: Portal
@@ -116,7 +116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1787873659343158}
   m_LocalRotation: {x: 0.35355338, y: -0.1464466, z: 0.35355338, w: 0.8535535}
-  m_LocalPosition: {x: -0, y: -0.274, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 0.11282585, y: 0.11282585, z: 0.11282587}
   m_Children:
   - {fileID: 4616071340685946}
@@ -221,18 +221,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605670690021046}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65824923533007852
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1727193101760134}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.8, z: 0.8}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &82460867583175624
 AudioSource:
   m_ObjectHideFlags: 1
@@ -369,6 +357,18 @@ MonoBehaviour:
   m_xAxis: 20
   m_yAxis: 20
   m_zAxis: -20
+--- !u!135 &135231374360838178
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1727193101760134}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198707730374656844
 ParticleSystem:
   m_ObjectHideFlags: 1

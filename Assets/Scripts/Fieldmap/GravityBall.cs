@@ -6,7 +6,6 @@ namespace ReviewGames
 {
     public class GravityBall : MonoBehaviour
     {
-        [SerializeField] GravityButton m_gravityButton;
         [SerializeField] AudioSource m_audioSource;
 
         private void OnCollisionEnter(Collision collision)
@@ -14,9 +13,9 @@ namespace ReviewGames
             if (collision.gameObject.tag == "Player")
             {
                 m_audioSource.Play();
-                Destroy(GetComponent<Renderer>());
-                Destroy(GetComponent<Collider>());
-                Destroy(gameObject, 2f);
+                Destroy(transform.GetChild(0).gameObject);
+                PlayerController.Instance.GravityInverseCount += 5;
+                Destroy(gameObject, 3f);
             }
         }
     }

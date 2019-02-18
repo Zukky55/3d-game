@@ -15,7 +15,6 @@ namespace ReviewGames
             if (other.gameObject.tag == "Player" && StateManager.Instance.m_StateMachine.m_State == StateManager.StateMachine.State.InTheGame)
             {
                 StateManager.Instance.TransitionState(m_state);
-                ScoreManager.Instance.AddScore(m_point);
                 m_audioSource.Play();
             }
         }

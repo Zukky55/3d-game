@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ReviewGames
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoSingleton<PlayerController>
     {
         #region Property
         /// <summary>Input direction. コントローラーから入力されたベクトル</summary>
@@ -31,6 +31,28 @@ namespace ReviewGames
                 return result;
             }
         }
+
+        /// <summary> InverseGravityが可能かどうか</summary>
+        public bool IsPossibleToInverseGravity
+        {
+            get
+            {
+                return m_stateManager.m_StateMachine.m_State == StateManager.StateMachine.State.InTheGame && m_possibleCountOfGravityInverse > 0;
+            }
+        }
+
+        public int GravityInverseCount
+        {
+            get
+            {
+                return m_possibleCountOfGravityInverse;
+            }
+            set
+            {
+                m_possibleCountOfGravityInverse = value;
+            }
+        }
+
         #endregion
 
         #region Field
@@ -45,6 +67,10 @@ namespace ReviewGames
         [SerializeField] float m_jumpPower = 10f;
         /// <summary>Jump出来る回数</summary>
         [SerializeField] int m_possibleCountOfJump;
+        /// <summary>空中にいる時の落下速度</summary>
+        [SerializeField] float m_fallingVelocity = 1f;
+        /// <summary>Gravity inverse出来る回数</summary>
+        [SerializeField] int m_possibleCountOfGravityInverse = 10;
 
         /// <summary>IsPossbleToJumpのバッキングフィールド</summary>
         int m_jumpCounter;
@@ -56,6 +82,8 @@ namespace ReviewGames
         bool m_isGrounded;
         /// <summary>同じColliderに接触している時間</summary>
         float m_collisionStaySeconds;
+        GravityController.GravitySource m_targetGravitySource = GravityController.GravitySource.Down;
+
 
         /// <summary>操作の標準とする向き(基本メインカメラ)</summary>
         [Header("Components")]
@@ -106,6 +134,8 @@ namespace ReviewGames
             {
                 Jump();
             }
+
+            FallingAddForce();
         }
 
         /// <summary>
@@ -122,8 +152,11 @@ namespace ReviewGames
         /// <param name="other"></param>
         private void OnTriggerEnter(Collider other)
         {
-            m_isGrounded = true;
-            m_anim.SetBool(AnimParameter.IsGrounded.ToString(), true);
+            if (other.gameObject.tag == "Cell")
+            {
+                m_isGrounded = true;
+                m_anim.SetBool(AnimParameter.IsGrounded.ToString(), true);
+            }
         }
 
         /// <summary>
@@ -132,8 +165,11 @@ namespace ReviewGames
         /// <param name="other"></param>
         private void OnTriggerStay(Collider other)
         {
-            m_isGrounded = true;
-            m_anim.SetBool(AnimParameter.IsGrounded.ToString(), true);
+            if (other.gameObject.tag == "Cell")
+            {
+                m_isGrounded = true;
+                m_anim.SetBool(AnimParameter.IsGrounded.ToString(), true);
+            }
         }
 
         /// <summary>
@@ -142,8 +178,11 @@ namespace ReviewGames
         /// <param name="other"></param>
         private void OnTriggerExit(Collider other)
         {
-            m_isGrounded = false;
-            m_anim.SetBool(AnimParameter.IsGrounded.ToString(), false);
+            if (other.gameObject.tag == "Cell")
+            {
+                m_isGrounded = false;
+                m_anim.SetBool(AnimParameter.IsGrounded.ToString(), false);
+            }
         }
 
         /// <summary>
@@ -221,6 +260,43 @@ namespace ReviewGames
                 m_rb.AddForce(-Physics.gravity * m_jumpPower, ForceMode.Impulse);
                 m_audioSource.PlayOneShot(m_jumpSE);
             }
+        }
+
+        /// <summary>
+        /// 重力を逆転させる
+        /// </summary>
+        public void InverseGravity()
+        {
+            if (!IsPossibleToInverseGravity)
+            {
+                return;
+            }
+
+            switch (m_targetGravitySource)
+            {
+                case GravityController.GravitySource.Up:
+                    m_targetGravitySource = GravityController.GravitySource.Down;
+                    break;
+                case GravityController.GravitySource.Down:
+                    m_targetGravitySource = GravityController.GravitySource.Up;
+                    break;
+                default:
+                    break;
+            }
+            m_gravityController.ChangeGravitySource(m_targetGravitySource);
+            m_possibleCountOfGravityInverse--;
+        }
+
+        /// <summary>
+        /// 空中にいる時落下加速度を追加する
+        /// </summary>
+        void FallingAddForce()
+        {
+            if (m_isGrounded)
+            {
+                return;
+            }
+            m_rb.AddForce(Physics.gravity * m_fallingVelocity);
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ReviewGames
 {
-    public class DungeonGenerator : MonoBehaviour
+    public class DungeonGenerator : MonoSingleton<DungeonGenerator>
     {
         /// <summary>スタート地点</summary>
         public Cell StartCell { get; private set; }
@@ -14,6 +14,8 @@ namespace ReviewGames
         public Cell GoalCell { get; private set; }
         /// <summary>全ての道Cell</summary>
         public List<Cell> RoadCells { get; private set; }
+        /// <summary>All Portals</summary>
+        public int AllPortals { get; private set; }
 
         /// <summary>DungeonMapのオブジェクト群</summary>
         List<GameObject> m_dungeonMapObjects;
@@ -38,6 +40,9 @@ namespace ReviewGames
 
         /// <summary>ゴール地点を設定しているかどうか</summary>
         bool m_isGoalSet;
+        /// <summary>仕上げ処理を行ったかどうか</summary>
+        bool m_isFinishSet;
+
 
         ///// <summary>goal portal</summary>
         //[SerializeField] GameObject m_goalPortalPrefab;
@@ -50,6 +55,8 @@ namespace ReviewGames
         [SerializeField] GameObject m_gravityBallPrefab;
         /// <summary>player</summary>
         [SerializeField] GameObject m_player;
+        /// <summary>GravityBall の生産量</summary>
+        [SerializeField] int SpawningVolumeOfGravityBall = 20;
         /// <summary>幅</summary>
         [SerializeField] int m_width;
         /// <summary>高さ</summary>
@@ -182,23 +189,24 @@ namespace ReviewGames
                 case Direction.None:
                     // もう掘れない場合は自分自身を掘削リストから削除し既存のポイントから掘削を再開する
                     // 最初に壁に当たったCellをゴールとする
-                    if (!m_isGoalSet)
+                    //if (!m_isGoalSet)
+                    //{
+                    //    m_isGoalSet = true;
+                    //    startCell.Status = CellStatus.Goal;
+                    //    GoalCell = startCell;
+
+                    //    // ゴール迄の最短通路の最後のCellを保存
+                    //    m_roadToGoal.Add(startCell);
+
+                    //    // Goal地点にPortalを設置する
+                    //    InstantiateWithTemplate(m_goalPortalPrefab, startCell);
+                    //}
+
+
+                    // 登録されていない且つStartではない場合場合行き止まり地点を保存
+                    var registrationCell = m_noPassageCells.Find(cell => cell.Index == startCell.Index);
+                    if (registrationCell == null || registrationCell.Status != CellStatus.Start)
                     {
-                        m_isGoalSet = true;
-                        startCell.Status = CellStatus.Goal;
-                        GoalCell = startCell;
-
-                        // ゴール迄の最短通路の最後のCellを保存
-                        m_roadToGoal.Add(startCell);
-
-                        //// Goal地点にPortalを設置する
-                        //InstantiateWithTemplate(m_goalPortalPrefab, startCell);
-                    }
-
-                    // 登録されていない場合行き止まり地点を保存
-                    if (m_noPassageCells.Find(cell => cell.Index == startCell.Index) == null)
-                    {
-                        Debug.Log(startCell.Index + "x" + startCell.Index.x + "y" + startCell.Index.y + "z" + startCell.Index.z);
                         m_noPassageCells.Add(startCell);
                     }
                     // 掘削リストから削除
@@ -210,8 +218,13 @@ namespace ReviewGames
                         DiggingInRecursively(m_roadEvenCell[Calculator.GetRandomEvenIndex(0, m_roadEvenCell.Count)]);
                     }
 
+
                     // 掘削ポイントがもうない場合は終了し結果をModelに同期
-                    Finish();
+                    if (!m_isFinishSet)
+                    {
+                        m_isFinishSet = true;
+                        Finish();
+                    }
                     return;
             }
 
@@ -241,8 +254,25 @@ namespace ReviewGames
             transform.localScale = new Vector3(m_mapSize, m_mapSize, m_mapSize);
 
             Sync();
-            //SpreadCoin();
-            SettingPortal();
+            //SpawnCoins();
+            SpawnGravityBalls();
+            SpawnPortals();
+            StageManager.Instance.SetupPortals(AllPortals);
+        }
+
+        /// <summary>
+        /// 任意の個数ランダムな場所にGravityBallを生み出す
+        /// </summary>
+        void SpawnGravityBalls()
+        {
+            var gravityBall = Resources.Load<GameObject>("GravityBall");
+            for (int i = 0; i < SpawningVolumeOfGravityBall; i++)
+            {
+                var cell = m_noPassageCells[Random.Range(0, m_noPassageCells.Count - 1)];
+                var go = Instantiate(gravityBall, transform);
+                go.transform.localPosition = cell.transform.localPosition;
+                go.transform.localScale = cell.transform.localScale;
+            }
         }
 
         void Sync()
@@ -272,7 +302,7 @@ namespace ReviewGames
         /// <summary>
         /// コインをばら撒く
         /// </summary>
-        void SpreadCoin()
+        void SpawnCoins()
         {
             var coins = GameObject.FindGameObjectsWithTag("Coin");
             foreach (var coin in coins)
@@ -291,9 +321,9 @@ namespace ReviewGames
         /// <summary>
         /// Portalを各地に設定する. 設定場所は各行き止まり地点
         /// </summary>
-        void SettingPortal()
+        void SpawnPortals()
         {
-#if true
+#if false
             var portals = GameObject.FindGameObjectsWithTag("Portal");
             foreach (var portal in portals)
             {
@@ -311,10 +341,13 @@ namespace ReviewGames
             Debug.Log(m_noPassageCells.Count);
             m_noPassageCells.ForEach(cell =>
             {
+                if (cell.Status != CellStatus.Start)
+                {
                 var go = Instantiate(portal, transform);
-                go.transform.SetParent(transform);
                 go.transform.localPosition = cell.transform.localPosition;
                 go.transform.localScale = cell.transform.localScale;
+                }
+                AllPortals++;
             });
 
 #endif
