@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4666494796817208}
   - component: {fileID: 114872055118992568}
-  - component: {fileID: 114144535301248182}
   - component: {fileID: 114432393475374976}
+  - component: {fileID: 114307552090267192}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -42,7 +42,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114144535301248182
+--- !u!114 &114307552090267192
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,7 +53,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526829da22cd0a04291de8e8304e9b3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_scoreText: {fileID: 0}
   m_portalCountTextBox: {fileID: 0}
   m_score: 0
   m_highScore: 0
@@ -70,6 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 934dea126dd67b54dad26dc6c0da6106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_fadeInSpeed: 3
 --- !u!114 &114872055118992568
 MonoBehaviour:
   m_ObjectHideFlags: 1

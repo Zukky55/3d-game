@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace ReviewGames
 {
@@ -15,7 +16,7 @@ namespace ReviewGames
 
         [SerializeField] Timer m_timer;
         [SerializeField] FloatingJoystick m_joystick;
-        [SerializeField] Image m_gameClearImage;
+        [SerializeField] TextMeshProUGUI m_finishText;
         StateManager m_stateManager;
         ScoreManager m_scoreManager;
         DungeonGenerator m_dungeonGenerator;
@@ -50,6 +51,11 @@ namespace ReviewGames
                 switch (state)
                 {
                     case StateManager.StateMachine.State.InitGame:
+                        SceneFader.Instance.FadeIn(3f);
+                        Physics.gravity = new Vector3(0, -9.81f, 0);
+                        m_joystick.gameObject.SetActive(false);
+                        m_finishText.enabled = false;
+                        break;
                     case StateManager.StateMachine.State.Pause:
                         m_joystick.gameObject.SetActive(false);
                         Time.timeScale = 0f;
@@ -59,11 +65,10 @@ namespace ReviewGames
                         Time.timeScale = 1f;
                         break;
                     case StateManager.StateMachine.State.GameOver:
-                        m_joystick.gameObject.SetActive(false);
-                        break;
                     case StateManager.StateMachine.State.GameClear:
-                        m_gameClearImage.enabled = true;
+                        m_finishText.enabled = true;
                         m_joystick.gameObject.SetActive(false);
+                        SceneFader.Instance.FadeOut(SceneFader.SceneTitle.Result, 3f);
                         break;
                 }
             });
@@ -77,18 +82,16 @@ namespace ReviewGames
             ScoreManager.Instance.DisplayPortalCount(CurrentPortalCount, totalPortals);
         }
 
-       public void AddPortals()
+        public void AddPortals()
         {
             CurrentPortalCount++;
             ScoreManager.Instance.DisplayPortalCount(CurrentPortalCount, TotalPortalCount);
 
-            if(CurrentPortalCount == TotalPortalCount)
+            if (CurrentPortalCount == TotalPortalCount)
             {
                 m_stateManager.TransitionState(StateManager.StateMachine.State.GameClear);
             }
         }
-
-
 
         /// <summary>
         /// Migrate state of State machine  to "GameOver"

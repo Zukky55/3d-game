@@ -13,7 +13,6 @@ namespace ReviewGames
         [SerializeField] PlayerController m_playerCtrl;
         public void OnPointerDown(PointerEventData eventData)
         {
-            Debug.Log("JumpButton");
             m_playerCtrl.Jump();
         }
     }

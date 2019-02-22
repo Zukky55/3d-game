@@ -54,9 +54,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4109019952193528}
-  - component: {fileID: 114302010472082116}
-  - component: {fileID: 82460867583175624}
-  - component: {fileID: 135231374360838178}
   m_Layer: 0
   m_Name: Portal_green
   m_TagString: Portal
@@ -75,6 +72,9 @@ GameObject:
   - component: {fileID: 33235145974281708}
   - component: {fileID: 23214025556768154}
   - component: {fileID: 114600572920789508}
+  - component: {fileID: 135725986125297930}
+  - component: {fileID: 114294564332227616}
+  - component: {fileID: 82152435446579970}
   m_Layer: 0
   m_Name: Portal
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1787873659343158}
   m_LocalRotation: {x: 0.35355338, y: -0.1464466, z: 0.35355338, w: 0.8535535}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.368, z: 0}
   m_LocalScale: {x: 0.11282585, y: 0.11282585, z: 0.11282587}
   m_Children:
   - {fileID: 4616071340685946}
@@ -221,12 +221,12 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605670690021046}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!82 &82460867583175624
+--- !u!82 &82152435446579970
 AudioSource:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1727193101760134}
+  m_GameObject: {fileID: 1787873659343158}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -316,19 +316,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114302010472082116
+--- !u!114 &114294564332227616
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1727193101760134}
+  m_GameObject: {fileID: 1787873659343158}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4465acaa066317840a9b17056352f7fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_point: 100
-  m_audioSource: {fileID: 82460867583175624}
+  m_range: 7
+  m_audioSource: {fileID: 82152435446579970}
+  m_amount: 0.5
 --- !u!114 &114581116114487370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -357,17 +359,17 @@ MonoBehaviour:
   m_xAxis: 20
   m_yAxis: 20
   m_zAxis: -20
---- !u!135 &135231374360838178
+--- !u!135 &135725986125297930
 SphereCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1727193101760134}
+  m_GameObject: {fileID: 1787873659343158}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 1.05
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198707730374656844
 ParticleSystem:

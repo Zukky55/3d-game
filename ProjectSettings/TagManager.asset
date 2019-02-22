@@ -11,6 +11,7 @@ TagManager:
   - GoalPortal
   - Coin
   - GravityBall
+  - ScoreText
   layers:
   - Default
   - TransparentFX

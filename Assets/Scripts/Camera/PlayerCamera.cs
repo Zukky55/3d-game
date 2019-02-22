@@ -26,6 +26,8 @@ namespace ReviewGames
         /// <summary>追従するカメラの向きに角度をつけるパラメータ</summary>
         [SerializeField] Vector2 m_offsetEulerAngle;
 
+        PlayerController m_player;
+
         private void OnEnable()
         {
             m_cameraParent = transform; // カメラのpivot
@@ -39,6 +41,8 @@ namespace ReviewGames
             {
                 m_lookTarget = GameObject.FindWithTag("Player").transform;
             }
+
+            m_player = PlayerController.Instance;
         }
 
         private void Update()

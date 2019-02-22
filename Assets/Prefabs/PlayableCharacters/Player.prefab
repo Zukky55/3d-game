@@ -4527,11 +4527,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68e74b8649eca9344adbd0519298591e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 8
+  m_moveSpeed: 12
   m_turnSpeed: 1
-  m_turnInterpolateAmount: 1
+  m_turnInterpolateAmount: 0.1
   m_jumpPower: 1
-  m_possibleCountOfJump: 5
+  m_possibleCountOfJump: 2
   m_fallingVelocity: 1.5
   m_possibleCountOfGravityInverse: 10
   m_directionalStandard: {fileID: 0}

@@ -29,6 +29,9 @@ namespace ReviewGames
         List<Cell> m_roadToGoal;
         /// <summary>StateMachine</summary>
         StateManager m_stateManager;
+        /// <summary>Portalの回転値をランダムな方向の壁にくっつけるためのリスト</summary>
+        List<Vector3> Rotation = new List<Vector3> { new Vector3(90, 0, 0), new Vector3(0, 90, 0), new Vector3(0, 0, 90), new Vector3(90, 90, 0), new Vector3(0, 90, 90), new Vector3(90, 0, 90) };
+
 
 
         /// <summary>迷路の外周分の余白</summary>
@@ -71,6 +74,8 @@ namespace ReviewGames
         /// <summary>DungeonMapの透明度</summary>
         [Header("Can't be changed during execution.")]
         [Range(0f, 1f)] [SerializeField] public float m_alpha = 1f;
+        /// <summary>ポータルを出現させる個数</summary>
+        [SerializeField] int m_spawnPortalVolue;
 
         private void Awake()
         {
@@ -137,11 +142,6 @@ namespace ReviewGames
             startCell.Status = CellStatus.Start;
             m_roadEvenCell.Add(startCell);
             StartCell = startCell;
-
-            // playerをスタート地点に立たせる
-            var pos = startCell.gameObject.transform.position;
-            var player = m_player != null ? m_player : GameObject.FindGameObjectWithTag("Player");
-            player.transform.position = new Vector3(pos.x, pos.y, pos.z);
 
             return startCell;
         }
@@ -253,6 +253,11 @@ namespace ReviewGames
             // mapSizeに合わせてScale変更
             transform.localScale = new Vector3(m_mapSize, m_mapSize, m_mapSize);
 
+            // playerをスタート地点に立たせる
+            var pos = StartCell.transform.position;
+            var player = m_player != null ? m_player : GameObject.FindGameObjectWithTag("Player");
+            player.transform.position = new Vector3(pos.x, pos.y, pos.z);
+
             Sync();
             //SpawnCoins();
             SpawnGravityBalls();
@@ -268,7 +273,7 @@ namespace ReviewGames
             var gravityBall = Resources.Load<GameObject>("GravityBall");
             for (int i = 0; i < SpawningVolumeOfGravityBall; i++)
             {
-                var cell = m_noPassageCells[Random.Range(0, m_noPassageCells.Count - 1)];
+                var cell = RoadCells[Random.Range(0, RoadCells.Count - 1)];
                 var go = Instantiate(gravityBall, transform);
                 go.transform.localPosition = cell.transform.localPosition;
                 go.transform.localScale = cell.transform.localScale;
@@ -324,31 +329,44 @@ namespace ReviewGames
         void SpawnPortals()
         {
 #if false
-            var portals = GameObject.FindGameObjectsWithTag("Portal");
-            foreach (var portal in portals)
+            // inspectorで設定した個数分ランダムに排出する
+            var portal = Resources.Load<GameObject>("Portal_green");
+
+            foreach (var cell in RoadCells)
             {
-                var cell = m_noPassageCells[Random.Range(0, m_noPassageCells.Count - 1)];
                 if (cell.Status == CellStatus.Start)
                 {
                     continue;
                 }
-                portal.transform.SetParent(transform);
-                portal.transform.localPosition = cell.transform.localPosition;
-                portal.transform.localScale = cell.transform.localScale;
-            }
-#else
-            var portal = Resources.Load<GameObject>("Portal_green");
-            Debug.Log(m_noPassageCells.Count);
-            m_noPassageCells.ForEach(cell =>
-            {
-                if (cell.Status != CellStatus.Start)
-                {
                 var go = Instantiate(portal, transform);
                 go.transform.localPosition = cell.transform.localPosition;
                 go.transform.localScale = cell.transform.localScale;
-                }
+
+                var vec = Rotation[Random.Range(0, Rotation.Count - 1)];
+                go.transform.rotation = Quaternion.Euler(vec);
                 AllPortals++;
-            });
+            }
+#else
+            // inspectorで設定した個数分ランダムに排出する
+            var portal = Resources.Load<GameObject>("Portal_green");
+            for (int i = 0; i < m_spawnPortalVolue; i++)
+            {
+                var cell = RoadCells[Random.Range(0, RoadCells.Count - 1)];
+                if (cell.Status == CellStatus.Start)
+                {
+                    i--;
+                    continue;
+                }
+
+                var go = Instantiate(portal, transform);
+                go.transform.localPosition = cell.transform.localPosition;
+                go.transform.localScale = cell.transform.localScale;
+
+                var vec = Rotation[Random.Range(0, Rotation.Count - 1)];
+                go.transform.rotation = Quaternion.Euler(vec);
+                RoadCells.Remove(cell);
+                AllPortals++;
+            }
 
 #endif
 

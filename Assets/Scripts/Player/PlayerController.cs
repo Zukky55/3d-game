@@ -53,6 +53,8 @@ namespace ReviewGames
             }
         }
 
+        public bool IsGrounded { get { return m_isGrounded; } }
+
         #endregion
 
         #region Field

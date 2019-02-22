@@ -63,7 +63,6 @@ namespace ReviewGames
                 GameOver,
                 GameClear,
                 Pause,
-                NextStage,
             }
         }
     }

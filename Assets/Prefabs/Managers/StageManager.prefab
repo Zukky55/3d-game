@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114585276380893150}
   - component: {fileID: 114437073330693878}
   - component: {fileID: 114876572188817948}
+  - component: {fileID: 114648736037450614}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c82e256469946d2afece25cfcd3dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_setMinute: 10
+  m_setMinute: 2
   m_setSeconds: 0
   m_timerText: {fileID: 0}
 --- !u!114 &114585276380893150
@@ -83,6 +84,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_gravitationalAcceleration: 9.18
+--- !u!114 &114648736037450614
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1932646745517300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3fcf551634ed544d9c338ceaadf3f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_countDownText: {fileID: 0}
+  m_discriptionText: {fileID: 0}
+  m_setTimeLimit: 10
 --- !u!114 &114876572188817948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,3 +111,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_timer: {fileID: 114437073330693878}
   m_joystick: {fileID: 0}
+  m_finishText: {fileID: 0}

@@ -23,5 +23,6 @@ namespace ReviewGames
         }
 
         protected abstract void Activate();
+
     }
 }
